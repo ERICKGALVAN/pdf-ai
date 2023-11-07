@@ -8,11 +8,14 @@ function PDFViewer() {
   const pdfContext = useContext(PdfContext) as {
     file: File | null;
     changeFile: (file?: File | null) => void;
+    isLoading: boolean;
+    upLoadPdf: (file: File) => void;
   };
   const [numPages, setNumPages] = useState<number | null>(null);
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
     setNumPages(numPages);
+    pdfContext.upLoadPdf(pdfContext.file!);
   }
 
   return (
@@ -23,7 +26,6 @@ function PDFViewer() {
         alignContent: "center",
         alignItems: "center",
         justifyContent: "center",
-        mb: "50px",
       }}
     >
       <IconButton
@@ -43,7 +45,7 @@ function PDFViewer() {
               sx={{
                 height: "100%",
                 width: "100%",
-                mb: "50px",
+                mb: page === numPages ? 0 : "50px",
                 alignContent: "center",
                 alignItems: "center",
                 justifyContent: "center",

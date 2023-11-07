@@ -3,11 +3,15 @@ import PDFViewer from "../../components/pdf/PdfViewer";
 import ChoosePdf from "../../components/ChoosePdf";
 import { useContext } from "react";
 import PdfContext from "../../context/PdfContext";
+import Chat from "../Chat";
 
 function Home() {
   const pdfContext = useContext(PdfContext) as {
     file: File | null;
     changeFile: (file: File) => void;
+    isLoading: boolean;
+    upLoadPdf: (file: File) => void;
+    text: string | null;
   };
   return (
     <Stack
@@ -24,10 +28,7 @@ function Home() {
       ) : (
         <ChoosePdf />
       )}
-
-      <Box sx={{ bgcolor: "primary.main", width: "50%", overflowY: "auto" }}>
-        ffggffg
-      </Box>
+      <Chat />
     </Stack>
   );
 }
