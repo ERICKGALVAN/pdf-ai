@@ -28,7 +28,9 @@ function Home() {
       ) : (
         <ChoosePdf />
       )}
-      <Chat />
+      <Box sx={{ width: "50%", height: "100vh", overflowY: "auto" }}>
+        <Chat />
+      </Box>
     </Stack>
   );
 }

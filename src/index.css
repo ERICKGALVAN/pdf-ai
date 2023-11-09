@@ -1,0 +1,10 @@
+.drop-button {
+  background-color: transparent;
+  color: white;
+  padding: 16px;
+  border: none;
+  cursor: pointer;
+  font-family: "Arial", sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+}

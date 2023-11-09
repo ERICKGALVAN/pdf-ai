@@ -11,7 +11,7 @@ function Chat() {
     text: string | null;
   };
   return (
-    <Box sx={{ bgcolor: "primary.main", width: "50%", overflowY: "auto" }}>
+    <Box>
       {pdfContext.isLoading ? (
         <Stack
           spacing={1}

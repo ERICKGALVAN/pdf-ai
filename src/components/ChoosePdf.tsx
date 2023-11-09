@@ -1,18 +1,8 @@
-import { styled, Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import { useContext } from "react";
 import PdfContext from "../context/PdfContext";
-
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
+import { FileUploader } from "react-drag-drop-files";
+import "../index.css";
 
 function ChoosePdf() {
   const pdfContext = useContext(PdfContext) as {
@@ -32,17 +22,15 @@ function ChoosePdf() {
         border: "1px solid black",
       }}
     >
-      <Button component="label" variant="contained">
-        Upload file
-        <VisuallyHiddenInput
-          type="file"
-          onChange={(e) => {
-            if (e.target.files && e.target.files.length > 0) {
-              pdfContext.changeFile(e.target.files[0]);
-            }
-          }}
-        />
-      </Button>
+      <FileUploader
+        label="Upload PDF"
+        classes="drop-button"
+        name="file-uploader"
+        types={["pdf"]}
+        handleChange={(file: File) => {
+          pdfContext.changeFile(file);
+        }}
+      />
     </Box>
   );
 }
