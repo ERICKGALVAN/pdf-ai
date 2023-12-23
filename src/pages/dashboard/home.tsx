@@ -1,6 +1,6 @@
 import { Stack, Box } from "@mui/material";
 import PDFViewer from "../../components/pdf/PdfViewer";
-import ChoosePdf from "../../components/ChoosePdf";
+import ChoosePdf from "../../components/pdf/ChoosePdf";
 import { useContext } from "react";
 import PdfContext from "../../context/PdfContext";
 import Chat from "../Chat";

@@ -8,6 +8,7 @@ const PdfContext = createContext(
     isLoading: boolean;
     upLoadPdf: (file: File) => void;
     text: string | null;
+    makeQuestion: (question: string) => void;
   }
 );
 
@@ -19,8 +20,15 @@ export function PdfProvider({ children }: { children: React.ReactNode }) {
   const uploadPdf = async (file: File) => {
     setIsLoading(true);
     const data = await pdfService.upLoadPdf(file);
-    setText(data.text);
+    console.log(data.text);
+    setText(JSON.stringify(data.text));
+
     setIsLoading(false);
+  };
+
+  const makeQuestion = async (question: string) => {
+    const data = await pdfService.makeQuestion(question);
+    console.log(data);
   };
   return (
     <PdfContext.Provider
@@ -30,6 +38,7 @@ export function PdfProvider({ children }: { children: React.ReactNode }) {
         isLoading: isLoading,
         upLoadPdf: uploadPdf,
         text,
+        makeQuestion,
       }}
     >
       {children}

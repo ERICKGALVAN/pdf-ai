@@ -1,5 +1,5 @@
-import { Box, Skeleton, Stack } from "@mui/material";
-import { useContext } from "react";
+import { Box, Input, Skeleton, Stack, Button } from "@mui/material";
+import { useContext, useState } from "react";
 import PdfContext from "../context/PdfContext";
 
 function Chat() {
@@ -9,7 +9,11 @@ function Chat() {
     isLoading: boolean;
     upLoadPdf: (file: File) => void;
     text: string | null;
+    makeQuestion: (question: string) => void;
   };
+
+  const [question, setQuestion] = useState<string>("");
+
   return (
     <Box>
       {pdfContext.isLoading ? (
@@ -29,7 +33,15 @@ function Chat() {
           <Skeleton variant="rectangular" width={"100%"} height={60} />
         </Stack>
       ) : (
-        pdfContext.text ?? ""
+        <Stack direction={"row"}>
+          <Input
+            placeholder="Type in here…"
+            onChange={(e) => setQuestion(e.target.value)}
+          />
+          <Button onClick={() => pdfContext.makeQuestion(question)}>
+            Send
+          </Button>
+        </Stack>
       )}
     </Box>
   );

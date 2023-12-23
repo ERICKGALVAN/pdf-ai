@@ -1,8 +1,9 @@
 import { Box } from "@mui/material";
 import { useContext } from "react";
-import PdfContext from "../context/PdfContext";
+import PdfContext from "../../context/PdfContext";
 import { FileUploader } from "react-drag-drop-files";
-import "../index.css";
+import pdfService from "../../services/pdf";
+import "../../index.css";
 
 function ChoosePdf() {
   const pdfContext = useContext(PdfContext) as {
@@ -31,6 +32,13 @@ function ChoosePdf() {
           pdfContext.changeFile(file);
         }}
       />
+      <button
+        onClick={() => {
+          pdfService.test();
+        }}
+      >
+        dsjkfjks
+      </button>
     </Box>
   );
 }
