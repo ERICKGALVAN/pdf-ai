@@ -9,6 +9,8 @@ function ChoosePdf() {
   const pdfContext = useContext(PdfContext) as {
     file: File | null;
     changeFile: (file?: File | null) => void;
+    getDocuments: () => void;
+    setIsNew: (isNew: boolean) => void;
   };
   return (
     <Box
@@ -30,6 +32,7 @@ function ChoosePdf() {
         types={["pdf"]}
         handleChange={(file: File) => {
           pdfContext.changeFile(file);
+          pdfContext.getDocuments();
         }}
       />
       <button

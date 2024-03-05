@@ -9,17 +9,18 @@ async function upLoadPdf(pdf: File) {
         "Content-Type": "multipart/form-data",
       },
     });
+    console.log(response.data);
     return response.data;
   } catch (err) {
     console.log(err);
   }
 }
 
-async function makeQuestion(question: String) {
+async function makeQuestion(question: String, id: string) {
   try {
-    console.log(question);
     const response = await api.post("/pdf/makeQuestion", {
       question,
+      id,
     });
     return response.data;
   } catch (err) {
@@ -40,10 +41,30 @@ async function test() {
   }
 }
 
+async function getDocuments() {
+  try {
+    const response = await api.get("/pdf/documents");
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function getBytes(id: string) {
+  try {
+    const response = await api.get("/pdf/bytes/" + id, {
+      responseType: "blob",
+    });
+    return response.data;
+  } catch (err) {}
+}
+
 const pdfService = {
   upLoadPdf,
   test,
   makeQuestion,
+  getDocuments,
+  getBytes,
 };
 
 export default pdfService;

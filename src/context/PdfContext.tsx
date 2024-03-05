@@ -1,44 +1,95 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import pdfService from "../services/pdf";
 
 const PdfContext = createContext(
   {} as {
+    isNew: boolean;
+    setIsNew: (isNew: boolean) => void;
     file: File | null;
     changeFile: (file?: File | null) => void;
     isLoading: boolean;
     upLoadPdf: (file: File) => void;
-    text: string | null;
     makeQuestion: (question: string) => void;
+    documents: any[] | null;
+    getDocuments: () => void;
+    chooseFile: (id: string) => void;
+    currentDocument: any | null;
+    chat: Chat[];
+    isThinking: boolean;
   }
 );
 
+interface Chat {
+  by: string;
+  text: string;
+}
+
 export function PdfProvider({ children }: { children: React.ReactNode }) {
   const [file, setFile] = useState<File | null>(null);
+  const [isNew, setIsNew] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [text, setText] = useState<string | null>("");
+  const [documents, setDocuments] = useState<any[] | null>(null);
+  const [currentDocument, setCurrentDocument] = useState<any | null>(null);
+  const [chat, setChat] = useState<Chat[]>([]);
+  const [isThinking, setIsThinking] = useState<boolean>(false);
+
+  useEffect(() => {
+    getDocuments();
+  }, []);
 
   const uploadPdf = async (file: File) => {
     setIsLoading(true);
-    const data = await pdfService.upLoadPdf(file);
-    console.log(data.text);
-    setText(JSON.stringify(data.text));
-
+    const doc = await pdfService.upLoadPdf(file);
+    setCurrentDocument(doc);
+    setChat([]);
     setIsLoading(false);
   };
 
   const makeQuestion = async (question: string) => {
-    const data = await pdfService.makeQuestion(question);
-    console.log(data);
+    setChat((prevChat) => [...prevChat, { by: "user", text: question }]);
+    setIsThinking(true);
+    const data = await pdfService.makeQuestion(question, currentDocument.id);
+    setIsThinking(false);
+    const aiMessage = data["chat_history"][data["chat_history"].length - 1];
+    setChat((prevChat) => [...prevChat, { by: "ai", text: aiMessage["text"] }]);
+    console.log(chat);
   };
+
+  const getDocuments = async () => {
+    const data = await pdfService.getDocuments();
+    setDocuments(data.documents);
+  };
+
+  const changeFile = (file?: File | null) => {
+    setIsNew(true);
+    setFile(file ?? null);
+  };
+
+  const chooseFile = async (id: string) => {
+    setIsNew(false);
+    const bytes = await pdfService.getBytes(id);
+    console.log(bytes);
+    const blob = new Blob([bytes], { type: "application/pdf" });
+    const file = new File([blob], "file.pdf", { type: "application/pdf" });
+    setFile(file);
+  };
+
   return (
     <PdfContext.Provider
       value={{
+        isNew,
+        setIsNew,
         file,
-        changeFile: (file?: File | null) => setFile(file ?? null),
+        changeFile,
         isLoading: isLoading,
         upLoadPdf: uploadPdf,
-        text,
         makeQuestion,
+        documents: documents ?? [],
+        getDocuments,
+        chooseFile,
+        currentDocument,
+        chat,
+        isThinking,
       }}
     >
       {children}
