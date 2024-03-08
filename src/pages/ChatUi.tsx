@@ -8,7 +8,7 @@ import {
   Paper,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import PdfContext from "../context/PdfContext";
 import { v4 as uuidv4 } from "uuid";
 import "../index.css";

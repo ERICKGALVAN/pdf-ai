@@ -1,4 +1,15 @@
-import { Stack, Box, Drawer, AppBar, Button, Typography } from "@mui/material";
+import {
+  Stack,
+  Box,
+  Drawer,
+  AppBar,
+  Button,
+  Typography,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import PDFViewer from "../../components/pdf/PdfViewer";
 import ChoosePdf from "../../components/pdf/ChoosePdf";
 import { useContext, useState } from "react";
@@ -14,6 +25,9 @@ function Home() {
     documents: any[] | null;
     chooseFile: (id: string) => void;
     setIsNew: (isNew: boolean) => void;
+    llms: string[];
+    currentLlm: string | null;
+    changeLLM: (llm: string) => void;
   };
 
   const [open, setOpen] = useState(false);
@@ -55,6 +69,25 @@ function Home() {
             padding: "1rem",
           }}
         >
+          {pdfContext.llms && (
+            <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel id="demo-simple-select-filled-label">LLM</InputLabel>
+              <Select
+                labelId="demo-simple-select-filled-label"
+                id="demo-simple-select-filled"
+                value={pdfContext.currentLlm}
+                onChange={(e) => pdfContext.changeLLM(e.target.value as string)}
+              >
+                {pdfContext.llms.map((llm) => {
+                  return (
+                    <MenuItem key={llm} value={llm}>
+                      {llm}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          )}
           {pdfContext.documents?.map((doc: any) => {
             return (
               <Box

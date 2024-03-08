@@ -16,6 +16,10 @@ const PdfContext = createContext(
     currentDocument: any | null;
     chat: Chat[];
     isThinking: boolean;
+    getLlms: () => void;
+    llms: string[];
+    currentLlm: string | null;
+    changeLLM: (llm: string) => void;
   }
 );
 
@@ -32,9 +36,12 @@ export function PdfProvider({ children }: { children: React.ReactNode }) {
   const [currentDocument, setCurrentDocument] = useState<any | null>(null);
   const [chat, setChat] = useState<Chat[]>([]);
   const [isThinking, setIsThinking] = useState<boolean>(false);
+  const [llms, setLlms] = useState<string[]>([]);
+  const [currentLlm, setCurrentLlm] = useState<string | null>(null);
 
   useEffect(() => {
     getDocuments();
+    getLlms();
   }, []);
 
   const uploadPdf = async (file: File) => {
@@ -48,7 +55,11 @@ export function PdfProvider({ children }: { children: React.ReactNode }) {
   const makeQuestion = async (question: string) => {
     setChat((prevChat) => [...prevChat, { by: "user", text: question }]);
     setIsThinking(true);
-    const data = await pdfService.makeQuestion(question, currentDocument.id);
+    const data = await pdfService.makeQuestion(
+      question,
+      currentDocument.id,
+      currentLlm!
+    );
     setIsThinking(false);
     const aiMessage = data["chat_history"][data["chat_history"].length - 1];
     setChat((prevChat) => [...prevChat, { by: "ai", text: aiMessage["text"] }]);
@@ -74,6 +85,16 @@ export function PdfProvider({ children }: { children: React.ReactNode }) {
     setFile(file);
   };
 
+  const getLlms = async () => {
+    const data = await pdfService.getLlms();
+    setLlms(data.llms);
+    setCurrentLlm(data.llms[0]);
+  };
+
+  const changeLLM = (llm: string) => {
+    setCurrentLlm(llm);
+  };
+
   return (
     <PdfContext.Provider
       value={{
@@ -90,6 +111,10 @@ export function PdfProvider({ children }: { children: React.ReactNode }) {
         currentDocument,
         chat,
         isThinking,
+        getLlms,
+        llms,
+        currentLlm,
+        changeLLM,
       }}
     >
       {children}

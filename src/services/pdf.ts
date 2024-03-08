@@ -16,11 +16,12 @@ async function upLoadPdf(pdf: File) {
   }
 }
 
-async function makeQuestion(question: String, id: string) {
+async function makeQuestion(question: String, id: string, llm: string) {
   try {
     const response = await api.post("/pdf/makeQuestion", {
       question,
       id,
+      llm,
     });
     return response.data;
   } catch (err) {
@@ -59,12 +60,22 @@ async function getBytes(id: string) {
   } catch (err) {}
 }
 
+async function getLlms() {
+  try {
+    const response = await api.get("/pdf/llms");
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 const pdfService = {
   upLoadPdf,
   test,
   makeQuestion,
   getDocuments,
   getBytes,
+  getLlms,
 };
 
 export default pdfService;
