@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import pdfService from "../services/pdf";
+import { TestInterface } from "../interfaces/test_interface";
 
 const PdfContext = createContext(
   {} as {
@@ -9,7 +10,7 @@ const PdfContext = createContext(
     changeFile: (file?: File | null) => void;
     isLoading: boolean;
     upLoadPdf: (file: File) => void;
-    makeQuestion: (question: string) => void;
+    makeQuestion: (question: string, reference: string) => void;
     documents: any[] | null;
     getDocuments: () => void;
     chooseFile: (id: string) => void;
@@ -20,6 +21,10 @@ const PdfContext = createContext(
     llms: string[];
     currentLlm: string | null;
     changeLLM: (llm: string) => void;
+    testMode: boolean;
+    setTestMode: (testMode: boolean) => void;
+    testInfo: Array<TestInterface> | null;
+    numberTest: number;
   }
 );
 
@@ -38,6 +43,12 @@ export function PdfProvider({ children }: { children: React.ReactNode }) {
   const [isThinking, setIsThinking] = useState<boolean>(false);
   const [llms, setLlms] = useState<string[]>([]);
   const [currentLlm, setCurrentLlm] = useState<string | null>(null);
+  const [testMode, setTestMode] = useState(false);
+  const [testInfo, setTestInfo] = useState<Array<TestInterface> | null>(null);
+  const [testInfoAux, setTestInfoAux] = useState<Array<TestInterface> | null>(
+    null
+  );
+  const [numberTest, setNumberTest] = useState<number>(0);
 
   useEffect(() => {
     getDocuments();
@@ -52,19 +63,80 @@ export function PdfProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(false);
   };
 
-  const makeQuestion = async (question: string) => {
+  const makeQuestion = async (question: string, reference: string | null) => {
     setChat((prevChat) => [...prevChat, { by: "user", text: question }]);
     setIsThinking(true);
     const data = await pdfService.makeQuestion(
       question,
       currentDocument.id,
-      currentLlm!
+      currentLlm!,
+      testMode,
+      reference ?? null
     );
-    setIsThinking(false);
+    if (data["test"]) {
+      const test = data["test"];
+      if (testInfo) {
+        setTestInfoAux(test);
+        testInfo.forEach((element) => {
+          if (element.llm === test.llm) {
+            element.bleu.bleu = (element.bleu.bleu + test.bleu.bleu) / 2;
+            element.bleu.brevity_penalty =
+              (element.bleu.brevity_penalty + test.bleu.brevity_penalty) / 2;
+            element.bleu.length_ratio =
+              (element.bleu.length_ratio + test.bleu.length_ratio) / 2;
+            element.bleu.reference_length =
+              (element.bleu.reference_length + test.bleu.reference_length) / 2;
+            element.bleu.translation_length =
+              (element.bleu.translation_length + test.bleu.translation_length) /
+              2;
+            element.bleu.precisions = element.bleu.precisions.map(
+              (value, index) => (value + test.bleu.precisions[index]) / 2
+            );
+            element.bert.f1 = element.bert.f1.map(
+              (value, index) => (value + test.bert.f1[index]) / 2
+            );
+            element.bert.precision = element.bert.precision.map(
+              (value, index) => (value + test.bert.precision[index]) / 2
+            );
+            element.bert.recall = element.bert.recall.map(
+              (value, index) => (value + test.bert.recall[index]) / 2
+            );
+            element.bert.hashcode = test.bert.hashcode;
+            element.rouge.rouge1 =
+              (element.rouge.rouge1 + test.rouge.rouge1) / 2;
+            element.rouge.rouge2 =
+              (element.rouge.rouge2 + test.rouge.rouge2) / 2;
+            element.rouge.rougeL =
+              (element.rouge.rougeL + test.rouge.rougeL) / 2;
+            element.rouge.rougeLsum =
+              (element.rouge.rougeLsum + test.rouge.rougeLsum) / 2;
+          }
+        });
+      }
+      setTestInfo(test);
+      setNumberTest(numberTest + 1);
+    }
+
     const aiMessage = data["chat_history"][data["chat_history"].length - 1];
     setChat((prevChat) => [...prevChat, { by: "ai", text: aiMessage["text"] }]);
-    console.log(chat);
+    setIsThinking(false);
   };
+
+  // const testQuestion = async (question: string, reference: string) => {
+  //   setChat((prevChat) => [...prevChat, { by: "user", text: question }]);
+  //   setIsThinking(true);
+  //   const data = await pdfService.makeQuestion(
+  //     question,
+  //     currentDocument.id,
+  //     currentLlm!
+  //   );
+  //   pdfService.testQuestion(question, reference);
+  //   const aiMessage = data["chat_history"][data["chat_history"].length - 1];
+  //   pdfService.testQuestion(aiMessage["text"], reference);
+  //   setChat((prevChat) => [...prevChat, { by: "ai", text: aiMessage["text"] }]);
+  //   setIsThinking(false);
+  //   console.log(chat);
+  // };
 
   const getDocuments = async () => {
     const data = await pdfService.getDocuments();
@@ -115,6 +187,10 @@ export function PdfProvider({ children }: { children: React.ReactNode }) {
         llms,
         currentLlm,
         changeLLM,
+        testMode,
+        setTestMode,
+        testInfo,
+        numberTest,
       }}
     >
       {children}

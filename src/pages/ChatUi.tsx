@@ -6,6 +6,7 @@ import {
   Avatar,
   Grid,
   Paper,
+  Stack,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { useState, useContext } from "react";
@@ -21,20 +22,34 @@ interface Chat {
 const ChatUI = () => {
   const pdfContext = useContext(PdfContext) as {
     chat: Chat[];
-    makeQuestion: (question: string) => void;
+    makeQuestion: (question: string, reference: string) => void;
     isThinking: boolean;
+    testMode: boolean;
   };
   const [input, setInput] = useState("");
+  const [testInput, setTestInput] = useState("");
 
   const handleSend = () => {
     if (input.trim() !== "") {
-      pdfContext.makeQuestion(input);
+      pdfContext.makeQuestion(input, testInput);
       setInput("");
+      setTestInput("");
     }
   };
 
+  // const handleTestSend = () => {
+  //   if (testInput.trim() !== "") {
+  //     setTestInput("");
+  //     setInput("");
+  //   }
+  // };
+
   const handleInputChange = (event: any) => {
     setInput(event.target.value);
+  };
+
+  const handleTestInputChange = (event: any) => {
+    setTestInput(event.target.value);
   };
 
   return pdfContext.chat ? (
@@ -53,29 +68,58 @@ const ChatUI = () => {
         {pdfContext.isThinking && <div className="loading">...</div>}
       </Box>
       <Box sx={{ p: 2, backgroundColor: "background.default" }}>
-        <Grid container spacing={2}>
-          <Grid item xs={10}>
-            <TextField
-              size="small"
-              fullWidth
-              placeholder="Type a message"
-              variant="outlined"
-              value={input}
-              onChange={handleInputChange}
-            />
+        <Stack direction="column" spacing={1}>
+          <Grid container spacing={2}>
+            <Grid item xs={10}>
+              <TextField
+                size="small"
+                fullWidth
+                placeholder="Type your message"
+                variant="outlined"
+                value={input}
+                onChange={handleInputChange}
+              />
+            </Grid>
+            {!pdfContext.testMode && (
+              <Grid item xs={2}>
+                <Button
+                  fullWidth
+                  color="primary"
+                  variant="contained"
+                  endIcon={<SendIcon />}
+                  onClick={handleSend}
+                >
+                  Send
+                </Button>
+              </Grid>
+            )}
           </Grid>
-          <Grid item xs={2}>
-            <Button
-              fullWidth
-              color="primary"
-              variant="contained"
-              endIcon={<SendIcon />}
-              onClick={handleSend}
-            >
-              Send
-            </Button>
-          </Grid>
-        </Grid>
+          {pdfContext.testMode && (
+            <Grid container spacing={2}>
+              <Grid item xs={10}>
+                <TextField
+                  size="small"
+                  fullWidth
+                  placeholder="Type a possible answer"
+                  variant="outlined"
+                  value={testInput}
+                  onChange={handleTestInputChange}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Button
+                  fullWidth
+                  color="primary"
+                  variant="contained"
+                  endIcon={<SendIcon />}
+                  onClick={handleSend}
+                >
+                  Send
+                </Button>
+              </Grid>
+            </Grid>
+          )}
+        </Stack>
       </Box>
     </Box>
   ) : null;
