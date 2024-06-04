@@ -16,7 +16,7 @@ function ChoosePdf() {
     <Box
       sx={{
         backgroundColor: "grey.400",
-        height: "100vh",
+        height: "91vh",
         width: "50%",
         alignContent: "center",
         alignItems: "center",
@@ -35,13 +35,13 @@ function ChoosePdf() {
           pdfContext.getDocuments();
         }}
       />
-      <button
+      {/* <button
         onClick={() => {
           pdfService.test();
         }}
       >
         dsjkfjks
-      </button>
+      </button> */}
     </Box>
   );
 }

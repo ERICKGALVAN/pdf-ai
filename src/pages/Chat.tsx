@@ -9,7 +9,7 @@ function Chat() {
     changeFile: (file: File) => void;
     isLoading: boolean;
     upLoadPdf: (file: File) => void;
-    makeQuestion: (question: string) => void;
+    makeQuestion: (question: string, reference: string) => void;
   };
 
   return (

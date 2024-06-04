@@ -70,7 +70,6 @@ export function PdfProvider({ children }: { children: React.ReactNode }) {
       question,
       currentDocument.id,
       currentLlm!,
-      testMode,
       reference ?? null
     );
     if (data["test"]) {
@@ -116,9 +115,10 @@ export function PdfProvider({ children }: { children: React.ReactNode }) {
       setTestInfo(test);
       setNumberTest(numberTest + 1);
     }
-
-    const aiMessage = data["chat_history"][data["chat_history"].length - 1];
-    setChat((prevChat) => [...prevChat, { by: "ai", text: aiMessage["text"] }]);
+    console.log(data);
+    // const aiMessage = data["chat_history"][data["chat_history"].length - 1];
+    const lastMessage = data["last_response"];
+    setChat((prevChat) => [...prevChat, { by: "ai", text: lastMessage }]);
     setIsThinking(false);
   };
 

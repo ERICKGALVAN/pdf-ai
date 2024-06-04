@@ -14,6 +14,9 @@ import PdfContext from "../context/PdfContext";
 import { v4 as uuidv4 } from "uuid";
 import "../index.css";
 
+import SmartToyIcon from "@mui/icons-material/SmartToy";
+import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+
 interface Chat {
   by: string;
   text: string;
@@ -142,8 +145,8 @@ const Message: React.FC<Chat> = ({ text, by }) => {
           alignItems: "center",
         }}
       >
-        <Avatar sx={{ bgcolor: isBot ? "primary.main" : "secondary.main" }}>
-          {isBot ? "B" : "U"}
+        <Avatar sx={{ bgcolor: isBot ? "#008DED" : "#169C1A" }}>
+          {isBot ? <SmartToyIcon /> : <PermIdentityIcon />}
         </Avatar>
         <Paper
           variant="outlined"
@@ -151,11 +154,18 @@ const Message: React.FC<Chat> = ({ text, by }) => {
             p: 2,
             ml: isBot ? 1 : 0,
             mr: isBot ? 0 : 1,
-            backgroundColor: isBot ? "primary.light" : "secondary.light",
+            backgroundColor: isBot ? "#008DED" : "#169C1A",
             borderRadius: isBot ? "20px 20px 20px 5px" : "20px 20px 5px 20px",
           }}
         >
-          <Typography variant="body1">{text}</Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              whiteSpace: "pre-line",
+            }}
+          >
+            {text}
+          </Typography>
         </Paper>
       </Box>
     </Box>

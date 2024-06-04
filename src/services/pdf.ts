@@ -9,10 +9,9 @@ async function upLoadPdf(pdf: File) {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 }
 
@@ -20,7 +19,6 @@ async function makeQuestion(
   question: String,
   id: string,
   llm: string,
-  test: boolean,
   reference: string | null
 ) {
   try {
