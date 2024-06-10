@@ -25,6 +25,7 @@ const PdfContext = createContext(
     setTestMode: (testMode: boolean) => void;
     testInfo: Array<TestInterface> | null;
     numberTest: number;
+    resetTest: () => void;
   }
 );
 
@@ -74,48 +75,58 @@ export function PdfProvider({ children }: { children: React.ReactNode }) {
     );
     if (data["test"]) {
       const test = data["test"];
+      setTestInfoAux(test);
+
       if (testInfo) {
-        setTestInfoAux(test);
         testInfo.forEach((element) => {
-          if (element.llm === test.llm) {
-            element.bleu.bleu = (element.bleu.bleu + test.bleu.bleu) / 2;
-            element.bleu.brevity_penalty =
-              (element.bleu.brevity_penalty + test.bleu.brevity_penalty) / 2;
-            element.bleu.length_ratio =
-              (element.bleu.length_ratio + test.bleu.length_ratio) / 2;
-            element.bleu.reference_length =
-              (element.bleu.reference_length + test.bleu.reference_length) / 2;
-            element.bleu.translation_length =
-              (element.bleu.translation_length + test.bleu.translation_length) /
-              2;
-            element.bleu.precisions = element.bleu.precisions.map(
-              (value, index) => (value + test.bleu.precisions[index]) / 2
-            );
-            element.bert.f1 = element.bert.f1.map(
-              (value, index) => (value + test.bert.f1[index]) / 2
-            );
-            element.bert.precision = element.bert.precision.map(
-              (value, index) => (value + test.bert.precision[index]) / 2
-            );
-            element.bert.recall = element.bert.recall.map(
-              (value, index) => (value + test.bert.recall[index]) / 2
-            );
-            element.bert.hashcode = test.bert.hashcode;
-            element.rouge.rouge1 =
-              (element.rouge.rouge1 + test.rouge.rouge1) / 2;
-            element.rouge.rouge2 =
-              (element.rouge.rouge2 + test.rouge.rouge2) / 2;
-            element.rouge.rougeL =
-              (element.rouge.rougeL + test.rouge.rougeL) / 2;
-            element.rouge.rougeLsum =
-              (element.rouge.rougeLsum + test.rouge.rougeLsum) / 2;
-          }
+          const testAux = testInfoAux?.filter(
+            (test) => test.llm === element.llm
+          )[0];
+          element.bleu.bleu = (element.bleu.bleu + testAux!.bleu.bleu) / 2;
+          element.bleu.brevity_penalty =
+            (element.bleu.brevity_penalty + testAux!.bleu.brevity_penalty) / 2;
+          element.bleu.length_ratio =
+            (element.bleu.length_ratio + testAux!.bleu.length_ratio) / 2;
+          element.bleu.reference_length =
+            (element.bleu.reference_length + testAux!.bleu.reference_length) /
+            2;
+          element.bleu.translation_length =
+            (element.bleu.translation_length +
+              testAux!.bleu.translation_length) /
+            2;
+          element.bleu.precisions = element.bleu.precisions.map(
+            (value, index) => (value + testAux!.bleu.precisions[index]) / 2
+          );
+          element.bert.f1 = element.bert.f1.map(
+            (value, index) => (value + testAux!.bert.f1[index]) / 2
+          );
+          element.bert.precision = element.bert.precision.map(
+            (value, index) => (value + testAux!.bert.precision[index]) / 2
+          );
+          element.bert.recall = element.bert.recall.map(
+            (value, index) => (value + testAux!.bert.recall[index]) / 2
+          );
+          element.bert.hashcode = testAux!.bert.hashcode;
+          element.rouge.rouge1 =
+            (element.rouge.rouge1 + testAux!.rouge.rouge1) / 2;
+          element.rouge.rouge2 =
+            (element.rouge.rouge2 + testAux!.rouge.rouge2) / 2;
+          element.rouge.rougeL =
+            (element.rouge.rougeL + testAux!.rouge.rougeL) / 2;
+          element.rouge.rougeLsum =
+            (element.rouge.rougeLsum + testAux!.rouge.rougeLsum) / 2;
+          element.wiki_split.exact =
+            (element.wiki_split.exact + testAux!.wiki_split.exact) / 2;
+          element.wiki_split.sacrebleu =
+            (element.wiki_split.sacrebleu + testAux!.wiki_split.sacrebleu) / 2;
+          element.wiki_split.sari =
+            (element.wiki_split.sari + testAux!.wiki_split.sari) / 2;
         });
+      } else {
+        setTestInfo(test);
       }
-      setTestInfo(test);
       setNumberTest(numberTest + 1);
     }
-    console.log(data);
     // const aiMessage = data["chat_history"][data["chat_history"].length - 1];
     const lastMessage = data["last_response"];
     setChat((prevChat) => [...prevChat, { by: "ai", text: lastMessage }]);
@@ -167,6 +178,11 @@ export function PdfProvider({ children }: { children: React.ReactNode }) {
     setCurrentLlm(llm);
   };
 
+  const resetTest = () => {
+    setTestInfo(null);
+    setNumberTest(0);
+  };
+
   return (
     <PdfContext.Provider
       value={{
@@ -191,6 +207,7 @@ export function PdfProvider({ children }: { children: React.ReactNode }) {
         setTestMode,
         testInfo,
         numberTest,
+        resetTest,
       }}
     >
       {children}

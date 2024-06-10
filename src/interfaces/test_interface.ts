@@ -21,9 +21,16 @@ interface Rouge {
   rougeLsum: number;
 }
 
+interface WikiSplit {
+  exact: number;
+  sacrebleu: number;
+  sari: number;
+}
+
 export interface TestInterface {
   llm: string;
   bleu: Bleu;
   bert: Bert;
   rouge: Rouge;
+  wiki_split: WikiSplit;
 }

@@ -1,16 +1,4 @@
-import {
-  Stack,
-  Box,
-  Drawer,
-  AppBar,
-  Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Switch,
-  IconButton,
-} from "@mui/material";
+import { Stack, Box, AppBar, Switch, IconButton } from "@mui/material";
 import PDFViewer from "../../components/pdf/PdfViewer";
 import ChoosePdf from "../../components/pdf/ChoosePdf";
 import { useContext, useState } from "react";

@@ -158,6 +158,18 @@ function TestInfo({ openModal, toggleModal }: TestInfoProps) {
                       })}
                     </Box>
                   </Box>
+                  <Typography variant="h6">WikiSplit</Typography>
+                  <Box
+                    sx={{
+                      pl: "1rem",
+                    }}
+                  >
+                    <Typography>Exact: {test.wiki_split.exact}</Typography>
+                    <Typography>
+                      Sacrebleu: {test.wiki_split.sacrebleu}
+                    </Typography>
+                    <Typography>Sari: {test.wiki_split.sari}</Typography>
+                  </Box>
                 </Box>
               );
             })}

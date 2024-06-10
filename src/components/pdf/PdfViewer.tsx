@@ -3,7 +3,6 @@ import { Document, Page } from "react-pdf";
 import { Box, IconButton, Stack, Typography } from "@mui/material";
 import PdfContext from "../../context/PdfContext";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { TestInterface } from "../../interfaces/test_interface";
 
 function PDFViewer() {
   const pdfContext = useContext(PdfContext) as {
@@ -12,7 +11,7 @@ function PDFViewer() {
     isLoading: boolean;
     upLoadPdf: (file: File) => void;
     isNew: boolean;
-    testInfo: Array<TestInterface> | null;
+    resetTest: () => void;
   };
   const [numPages, setNumPages] = useState<number | null>(null);
 
@@ -36,7 +35,7 @@ function PDFViewer() {
         size="large"
         onClick={() => {
           pdfContext.changeFile(null);
-          pdfContext.testInfo = null;
+          pdfContext.resetTest();
         }}
       >
         <DeleteIcon fontSize="inherit" />
