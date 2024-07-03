@@ -2,6 +2,8 @@
 
 Este es el frontend del proyecto de tesina "Comparación cualitativa y cuantitativa de respuestas generadas por Modelos de Lenguaje Pre Entrenados" el cual busca comparar las respuestas y textos generados por ciertos modelos elegidos y determinar las características que los hacen mejores o peores.
 
+[Proyecto Backend](https://github.com/ERICKGALVAN/pdf_chat_backend)
+
 ## Modelos utilizados
 
 - OpenAI GPT 3.5 Turbo: [OpenAI/Gpt3.5](https://platform.openai.com/docs/models/gpt-3-5-turbo)
