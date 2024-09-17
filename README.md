@@ -4,6 +4,7 @@ This is the frontend of the thesis project 'Qualitative and Quantitative Compari
 
 The frontend is made up with React TS, and tu run it first install dependencies with 
  - npm install
+   
 then, to run the project:
  - npm run dev
 
