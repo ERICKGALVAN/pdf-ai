@@ -9,6 +9,8 @@ import { TestInterface } from "../../interfaces/test_interface";
 import MenuIcon from "@mui/icons-material/Menu";
 import TestInfo from "./TestInfo";
 import CustomDrawer from "./CustomDrawer";
+import InfoIcon from "@mui/icons-material/Info";
+import InfoModal from "./InfoModal";
 
 function Home() {
   const pdfContext = useContext(PdfContext) as {
@@ -30,6 +32,7 @@ function Home() {
 
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [openInfo, setOpenInfo] = useState(false);
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
   };
@@ -37,9 +40,14 @@ function Home() {
   const toggleModal = () => {
     setOpenModal(!openModal);
   };
+
+  const toggleInfo = () => {
+    setOpenInfo(!openInfo);
+  };
   return (
     <>
       <TestInfo openModal={openModal} toggleModal={toggleModal} />
+      <InfoModal openModal={openInfo} toggleModal={toggleInfo} />
       <AppBar
         position="static"
         sx={{
@@ -54,7 +62,12 @@ function Home() {
             color: "black",
           }}
         >
-          <IconButton onClick={toggleDrawer(true)}>
+          <IconButton onClick={toggleInfo}>
+            <InfoIcon />
+          </IconButton>
+          {/* uncomment to show test options (must have huggingface credentials) */}
+
+          {/* <IconButton onClick={toggleDrawer(true)}>
             <MenuIcon />
           </IconButton>
 
@@ -68,7 +81,7 @@ function Home() {
               checked={pdfContext.testMode}
               onChange={() => pdfContext.setTestMode(!pdfContext.testMode)}
             />
-          </Stack>
+          </Stack> */}
         </Stack>
       </AppBar>
       <CustomDrawer open={open} toggleDrawer={toggleDrawer} />

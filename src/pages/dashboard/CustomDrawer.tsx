@@ -38,10 +38,12 @@ function CostumDrawer({ open, toggleDrawer }: CostumDrawerProps) {
           padding: "1rem",
         }}
       >
+        {/* enable select to change between llms (must have huggingface credentials) */}
         {pdfContext.llms && (
           <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
             <InputLabel id="demo-simple-select-filled-label">LLM</InputLabel>
             <Select
+              disabled
               labelId="demo-simple-select-filled-label"
               id="demo-simple-select-filled"
               value={pdfContext.currentLlm}
@@ -75,14 +77,14 @@ function CostumDrawer({ open, toggleDrawer }: CostumDrawerProps) {
               </Box>
             );
           })} */}
-        <Button
+        {/* <Button
           onClick={() => {
             localStorage.removeItem("token");
             window.location.reload();
           }}
         >
           Cerrar Sesión
-        </Button>
+        </Button> */}
       </Box>
     </Drawer>
   );
