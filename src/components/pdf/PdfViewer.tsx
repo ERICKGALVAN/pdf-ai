@@ -3,7 +3,13 @@ import { Document, Page, pdfjs } from "react-pdf";
 import { Box, IconButton, Stack, Typography } from "@mui/material";
 import PdfContext from "../../context/PdfContext";
 import DeleteIcon from "@mui/icons-material/Delete";
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
+pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+
+const options = {
+  cMapUrl: "/cmaps/",
+  standardFontDataUrl: "/standard_fonts/",
+};
 
 function PDFViewer() {
   const pdfContext = useContext(PdfContext) as {
@@ -42,7 +48,11 @@ function PDFViewer() {
         <DeleteIcon fontSize="inherit" />
       </IconButton>
 
-      <Document file={pdfContext.file} onLoadSuccess={onDocumentLoadSuccess}>
+      <Document
+        file={pdfContext.file}
+        onLoadSuccess={onDocumentLoadSuccess}
+        options={options}
+      >
         {Array.apply(null, Array(numPages))
           .map((_x, i) => i + 1)
           .map((page) => (

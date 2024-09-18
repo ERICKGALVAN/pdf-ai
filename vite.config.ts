@@ -1,8 +1,23 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import eslintPlugin from "vite-plugin-eslint";
+import path from "node:path";
+import { createRequire } from "node:module";
 
-// https://vitejs.dev/config/
+import { defineConfig, normalizePath } from "vite";
+import { viteStaticCopy } from "vite-plugin-static-copy";
+
+const require = createRequire(import.meta.url);
+
+const pdfjsDistPath = path.dirname(require.resolve("pdfjs-dist/package.json"));
+const cMapsDir = normalizePath(path.join(pdfjsDistPath, "cmaps"));
+
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    viteStaticCopy({
+      targets: [
+        {
+          src: cMapsDir,
+          dest: "",
+        },
+      ],
+    }),
+  ],
 });
