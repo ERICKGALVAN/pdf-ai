@@ -31,7 +31,7 @@ function ChoosePdf() {
         types={["pdf"]}
         handleChange={(file: File) => {
           pdfContext.changeFile(file);
-          pdfContext.getDocuments();
+          // pdfContext.getDocuments();
         }}
       />
       {/* <button

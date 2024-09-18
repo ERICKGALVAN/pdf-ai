@@ -16,7 +16,7 @@ function Home() {
     changeFile: (file: File) => void;
     isLoading: boolean;
     upLoadPdf: (file: File) => void;
-    documents: any[] | null;
+    // documents: any[] | null;
     chooseFile: (id: string) => void;
     setIsNew: (isNew: boolean) => void;
     llms: string[];

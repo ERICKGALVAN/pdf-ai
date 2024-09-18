@@ -1,8 +1,9 @@
 import { useState, useContext } from "react";
-import { Document, Page } from "react-pdf";
+import { Document, Page, pdfjs } from "react-pdf";
 import { Box, IconButton, Stack, Typography } from "@mui/material";
 import PdfContext from "../../context/PdfContext";
 import DeleteIcon from "@mui/icons-material/Delete";
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 function PDFViewer() {
   const pdfContext = useContext(PdfContext) as {
