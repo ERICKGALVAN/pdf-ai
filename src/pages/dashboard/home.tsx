@@ -1,12 +1,10 @@
-import { Stack, Box, AppBar, Switch, IconButton } from "@mui/material";
+import { Stack, Box, AppBar, IconButton } from "@mui/material";
 import PDFViewer from "../../components/pdf/PdfViewer";
 import ChoosePdf from "../../components/pdf/ChoosePdf";
 import { useContext, useState } from "react";
 import PdfContext from "../../context/PdfContext";
 import Chat from "../Chat";
-import BarChartIcon from "@mui/icons-material/BarChart";
 import { TestInterface } from "../../interfaces/test_interface";
-import MenuIcon from "@mui/icons-material/Menu";
 import TestInfo from "./TestInfo";
 import CustomDrawer from "./CustomDrawer";
 import InfoIcon from "@mui/icons-material/Info";

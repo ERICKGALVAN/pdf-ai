@@ -1,10 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/dashboard/home";
 import { pdfjs } from "react-pdf";
-import LoginScreen from "./components/auth/LoginScreen";
-import RegisterScreen from "./components/auth/RegisterScreen";
-import PrivateRoute from "./components/PrivateRoute";
-import PublicRoute from "./components/PublicRoute";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.js",

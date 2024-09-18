@@ -2,7 +2,6 @@ import { Box } from "@mui/material";
 import { useContext } from "react";
 import PdfContext from "../../context/PdfContext";
 import { FileUploader } from "react-drag-drop-files";
-import pdfService from "../../services/pdf";
 import "../../index.css";
 
 function ChoosePdf() {
