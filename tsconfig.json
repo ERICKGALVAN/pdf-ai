@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "eslint.config.js", "pdf.worker.min.mjs"],
+  "include": ["src", "eslint.config.js", "public/pdf.worker.min.mjs"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
