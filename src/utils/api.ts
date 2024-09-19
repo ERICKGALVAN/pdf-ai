@@ -1,10 +1,10 @@
 import axios from "axios";
 
 // const localUrl = "http://127.0.0.1:8000/";
-// const baseUrl = "https://pdfai-back.onrender.com/";
+const baseUrl = "https://pdfai-back.onrender.com/";
 
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/",
+  baseURL: baseUrl,
 });
 
 api.interceptors.request.use(
